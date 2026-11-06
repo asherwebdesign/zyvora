@@ -1,0 +1,15 @@
+ZYVORA BUILD 17 VERIFICATION
+
+Automated test suite: 44 passed, 0 failed.
+JavaScript syntax checks: server.js, database-config.js, scripts/doctor.js,
+backup-postgres.js, restore-postgres.js, sync-shipments.js, public/app.js,
+public/marketplace.js and public/preferences.js passed.
+Render Blueprint YAML syntax: parsed successfully.
+
+Not yet verified in this build environment:
+- Connection to the user's local PostgreSQL 18 database.
+- Actual Paystack, Shipbubble, Cloudinary or S3 credentials and live provider actions.
+- A new Render deployment and cloud database connection.
+- Real inventory, images, prices, shipping weights, policies or customer orders.
+
+Before accepting real orders, configure and test those external services and business details.

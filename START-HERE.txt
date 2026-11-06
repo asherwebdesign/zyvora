@@ -1,0 +1,48 @@
+ZYVORA — BUILD 17 | START HERE
+
+WHAT THIS BUILD CHANGES
+- Keeps the Build 16 storefront, customer, seller and admin capabilities.
+- Adds explicit database URL validation. The server no longer silently tries localhost:5432 when DATABASE_URL is missing.
+- Blocks a production database URL that points at localhost and tells you to use the cloud database Internal Database URL.
+- Adds `npm run doctor` to check the database connection without showing credentials.
+- Uses the lowercase local database name `zyvora` to match the fresh database created in pgAdmin 4.
+- Does not insert unverified demo products by default. Sample products can be enabled only for a temporary preview.
+- Keeps the dragon artwork, obsidian/gold palette and seven realm cards.
+
+LOCAL SETUP (WINDOWS / VS CODE)
+1. Extract the ZIP.
+2. Open the extracted `ZYVORA` folder in VS Code.
+3. Copy `.env.example` and name the copy `.env` (do not upload `.env`).
+4. Open `.env` and replace `YOUR_PASSWORD` in DATABASE_URL with the PostgreSQL password you use for your local PostgreSQL 18 server. Keep the database name exactly `zyvora`.
+5. Fill `ADMIN_EMAIL` and `ADMIN_PASSWORD` with the email and strong password you want to use for the first ZYVORA administrator. Keep these private.
+6. Set SESSION_SECRET to a separate private random value of at least 32 characters. Generate one in PowerShell with:
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+7. In the VS Code terminal, run:
+   npm install
+   npm run doctor
+8. Continue only when the doctor reports `DATABASE CONNECTION: OK`.
+9. Start the site:
+   npm run dev
+10. Open http://localhost:3000.
+
+IMPORTANT PORTS
+- 3000 is the ZYVORA website (Node.js / Express).
+- 5432 is PostgreSQL (the database server).
+- pgAdmin 4 manages PostgreSQL; it is not the database server itself.
+
+INVENTORY
+- Sample products are not inserted by default. This is intentional: no supplier data, product descriptions, prices, weights or stock should be invented.
+- Keep `SEED_SAMPLE_PRODUCTS=false` for the real store.
+- After verified inventory is ready, sign in as the admin and use the CSV product import. CSV headers and rules are documented in README.md.
+
+RENDER DEPLOYMENT
+- `render.yaml` defines a `zyvora-store` web service and a matching `zyvora-db` PostgreSQL database. Both use the Free plan for initial testing, so review the plan before creating resources.
+- In Render, create a Blueprint from the GitHub repository and approve the resources only after reviewing the plan and name.
+- The Blueprint wires DATABASE_URL from the database's connection string and generates SESSION_SECRET. The cloud app must use the cloud database URL, never your PC's localhost URL.
+- Render Free Postgres currently expires 30 days after creation. It is suitable for short tests only, not a long-term live shop. Upgrade or select another durable PostgreSQL provider before storing real customer/order data.
+- Do not deploy a Free database as the permanent customer database. Make a backup before any provider or plan change.
+
+SECURITY
+- Never paste `.env`, passwords, DATABASE_URL, SESSION_SECRET, Paystack keys or shipping API keys into chat or GitHub.
+- Use real provider credentials only in the provider dashboard's secret/environment settings.
+- Paystack, Shipbubble, Cloudinary and off-site backup credentials remain optional until those services are actually configured.
