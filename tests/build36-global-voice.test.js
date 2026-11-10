@@ -1,0 +1,9 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.join(__dirname,'..');
+test('global country and language preference choices are present',()=>{const html=fs.readFileSync(path.join(root,'public/settings.html'),'utf8');for(const c of ['NG','US','GB','CA','AU','JP','KR','IN','AE','BR','ZA'])assert.match(html,new RegExp(`value="${c}"`));for(const l of ['en','fr','es','de','pt','it','nl','ar','hi','ja','ko','zh','sw'])assert.match(html,new RegExp(`value="${l}"`));});
+test('ZI supports voice-first continuous conversation without a mandatory wake phrase',()=>{const html=fs.readFileSync(path.join(root,'public/zi.html'),'utf8'),js=fs.readFileSync(path.join(root,'public/zi.js'),'utf8');assert.match(html,/TALK TO ZI/);assert.match(html,/without a wake phrase/i);assert.match(js,/SpeechRecognition/);assert.match(js,/speak naturally/i);assert.match(js,/speechSynthesis/);assert.match(js,/Hello! I am ZI/);assert.match(js,/recognition\.continuous=true/);assert.doesNotMatch(js,/lower\.match\(\/\^\(hey/);});
+test('checkout offers card, transfer, USSD, mobile money and conditional COD',()=>{const app=fs.readFileSync(path.join(root,'public/app.js'),'utf8'),server=fs.readFileSync(path.join(root,'server.js'),'utf8');for(const method of ['card','bank_transfer','ussd','mobile_money','cod'])assert.ok(app.includes(`value="${method}"`));assert.match(server,/paymentChannels/);assert.match(server,/channels:paymentChannels/);});
+test('seed catalogue items are visibly marked sample-only and blocked from purchase',()=>{const app=fs.readFileSync(path.join(root,'public/app.js'),'utf8'),server=fs.readFileSync(path.join(root,'server.js'),'utf8');assert.match(app,/SAMPLE PRODUCT/);assert.match(app,/p\.is_sample\)return toast/);assert.match(server,/is_sample:sampleSlugs\.has/);});

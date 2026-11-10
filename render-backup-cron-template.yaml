@@ -1,0 +1,55 @@
+# Template only: copy these two Cron services into the existing render.yaml services: list.
+# They reference the existing Render database resource named zyvora-db; do not add a duplicate database.
+# Configure the BACKUP_S3_* secrets in Render. Production backups intentionally fail without off-site S3 storage.
+services:
+  - type: cron
+    name: zyvora-db-backup
+    runtime: node
+    plan: starter
+    schedule: "0 2 * * *"
+    buildCommand: npm install
+    startCommand: npm run backup
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zyvora-db
+          property: connectionString
+      - key: BACKUP_ENCRYPTION_KEY
+        sync: false
+      - key: BACKUP_S3_ENDPOINT
+        sync: false
+      - key: BACKUP_S3_BUCKET
+        sync: false
+      - key: BACKUP_S3_REGION
+        value: us-east-1
+      - key: BACKUP_S3_ACCESS_KEY_ID
+        sync: false
+      - key: BACKUP_S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: BACKUP_S3_PREFIX
+        value: zyvora
+      - key: BACKUP_LOCAL_ONLY
+        value: "false"
+      - key: BACKUP_RETENTION_DAYS
+        value: "14"
+      - key: ALERT_WEBHOOK_URL
+        sync: false
+
+  - type: cron
+    name: zyvora-shipment-sync
+    runtime: node
+    plan: starter
+    schedule: "*/30 * * * *"
+    buildCommand: npm install
+    startCommand: npm run shipping:sync
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zyvora-db
+          property: connectionString
+      - key: SHIPBUBBLE_API_KEY
+        sync: false

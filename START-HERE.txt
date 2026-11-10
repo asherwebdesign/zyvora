@@ -1,0 +1,18 @@
+ZYVORA — START HERE
+
+1. Install Node.js 20 or newer and PostgreSQL.
+2. Open this ZYVORA folder in VS Code.
+3. In PowerShell, run: npm install
+4. Copy .env.example to .env and enter your private PostgreSQL connection and a random SESSION_SECRET.
+5. Create the PostgreSQL database named zyvora.
+6. Run: npm run doctor
+7. Run: npm run dev
+8. Open: http://localhost:3000
+
+Keep .env private. Never upload it or send passwords/API keys in chat.
+
+The storefront, original dragon artwork/video, original music tracks, regional preferences, customer account page, marketplace workspace and ZI shopping companion are included. ZI can search the approved live catalogue, filter by category and price preference, speak/listen in supported browsers and add selected purchasable listings to the bag. Checkout still requires the customer to review and confirm the order. Sample catalogue entries are examples only and cannot be purchased. Add verified inventory before accepting orders.
+
+Live Paystack, Shipbubble, email, hosted database, domain and backup storage require the owner's own approved accounts and credentials.
+
+The agreed eight-phase work tracker is retained in BUILD_45_STATUS.md.

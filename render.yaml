@@ -1,0 +1,64 @@
+services:
+  - type: web
+    name: zyvora-store
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health/ready
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zyvora-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: BASE_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_CURRENCY
+        value: NGN
+      - key: ENABLE_COD
+        value: "false"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: SHIPBUBBLE_API_KEY
+        sync: false
+      - key: SHIPBUBBLE_SENDER_ADDRESS_CODE
+        sync: false
+      - key: SHIPBUBBLE_CATEGORY_ID
+        sync: false
+      - key: SHIPBUBBLE_PACKAGE_LENGTH_CM
+        value: "30"
+      - key: SHIPBUBBLE_PACKAGE_WIDTH_CM
+        value: "20"
+      - key: SHIPBUBBLE_PACKAGE_HEIGHT_CM
+        value: "10"
+      - key: SHIPBUBBLE_DEFAULT_ITEM_WEIGHT_KG
+        value: "0.5"
+      - key: ALERT_WEBHOOK_URL
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: SUPPORT_EMAIL
+        sync: false
+      - key: FX_BASE_CURRENCY
+        value: NGN
+databases:
+  - name: zyvora-db
+    databaseName: zyvora
+    user: zyvora
+    plan: free
